@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // let payload = fetch("https://jsonplaceholder.typicode.com/posts");
+      // // console.log(payload); // json object or promise
+
+      // payload
+      //   .then((data) => {
+      //     // console.log(data); // response object
+      //     // convert the js object to json
+      //     let jsonData = data.json(); // this returns a promise
+      //     // console.log(jsonData);
+
+      //     jsonData
+      //       .then((value) => {
+      //         console.log(value); // body and title
+      //       })
+      //       .catch((error) => {
+      //         console.log(error); // then, catch chaining
+      //       });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   })
+      //   .finally(() => {
+      //     console.log("finally");
+      //   });
+
+      let apiCall = async () => {
+        let payload = await fetch("https://jsonplaceholder.typicode.com/posts");
+        console.log(payload);
+        // let jsonData = await payload.json();
+        // console.log(jsonData);
+      };
+
+      apiCall();
+
+      // let student = {
+      //   name: "abc",
+      //   skills: ["html", "css", "js"],
+      //   address: {
+      //     city: "bangalore",
+      //     state: "karnataka",
+      //   },
+      //   hasInsurance: null,
+      //   key6: undefined,
+      // };
+
+      // console.log(student);
+    </script>
+  </body>
+</html>
+
+<!--
+  i have made a connection with database
+
+  in return it returns a promise
+
+  i'll handle the promise
+
+  then : resolve
+
+  catch :reject
+
+  finally: i will close the database connection
+
+  json : java script object notation
+  {"key" :value,
+    "key1":value1,
+    .,
+    .}
+
+
+    [{title and body}, {title and body},{},....]
+
+ -->
