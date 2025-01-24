@@ -1,7 +1,6 @@
 //! const variableName = require('path')
 //! const variableName = require("moduleName")
-const { create } = require("domain");
-const fs = require("fs");
+// const fs = require("fs");
 // console.log(fs);
 
 //! CRUD ON FILES IN SYNCHRONOUS(SYNC) WAY
@@ -213,13 +212,175 @@ const fs = require("fs");
 // method name ==> mkdir()
 // syntax ==> fs.mkdir("path/folderName", cb)
 
-fs.mkdir("./css", (err) => {
-  if (err) console.log(err);
-  console.log("folder created");
-});
+// fs.mkdir("./css", (err) => {
+//   if (err) console.log(err);
+//   console.log("folder created");
+// });
 
 //! 6) deleting a folder
 
 //! 7) renaming a folder/file
 
 // github.com/utk-281/node_0700
+
+//! === using promises ===
+//? promises are used to handle asynchronous execution
+// let fs1 = require("fs");
+// console.log(fs1); // asynchronous execution is possible using callbacks
+
+let fs = require("fs").promises; // asynchronous operation will be returning me a promise
+// console.log(fs);
+// let fs = require("fs/promises");
+// it means that whenever we are going to use methods of fs, it will be returning a promise
+
+//! 1) creating a file
+// method name ==> writeFile()
+// syntax ==> fs.writeFile("path/filename", "data")
+
+// let value = fs.writeFile("./index.html", "<h1>hello world</h1>");
+// console.log(value);
+
+// value
+//   .then(() => {
+//     // promise is not giving me a value
+//     // console.log(abc); // undefined
+//     console.log("file created");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+// writeFileSync() --> synchronous
+// writeFile() --> asynchronous
+
+//! 2) reading a file
+// method name ==> readFile()
+// syntax ==> fs.readFile("path", "encoding")
+
+// let value = fs.readFile("../../Demo/javascript.js", "utf-8"); // value = {Promise pending}
+// value
+//   .then((data) => {
+//     // if the promise contains any kind of value
+//     console.log(data); //?
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! 3) updating/ appending a file
+// method name ==> appendFile()
+// syntax ==> fs.appendFile("path", "data")
+// let value = fs.appendFile("./index.html", "<p>my name abc</p>");
+// value
+//   .then(() => {
+//     console.log("file appended");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+// s;
+// let val = fs.appendFile("./index.html", "<h2>I am Narendra updated</h2>");
+// val
+//   .then(() => {
+//     console.log("File appended");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//? if we are using appendFile() and the file that we are updating exists then it will simply add the data,
+//? if the file dne then it will create one file with the given data
+
+//! 4) deleting a file
+// method name ==> unlink()
+// syntax ==> fs.unlink("path")
+
+// fs.unlink("./index.html")
+//   .then(() => {
+//     console.log("file deleted");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//!  5) create a folder
+// method name ==> mkdir()
+// syntax ==> mkdir("folderName/path")
+
+// fs.mkdir("./sample")
+//   .then(() => {
+//     console.log("folder created");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! 6) deleting a folder
+// method name ==> rmdir()
+// syntax ==> fs.rmdir("folderName/path")
+
+// fs.rmdir("./sample")
+//   .then(() => {
+//     console.log("folder deleted");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//! 7) renaming a folder/file
+// method name ==> rename()
+// syntax ==> fs.rename("oldPath", "newPath")
+
+// fs.rename("./sample", "./sample1")
+//   .then(() => {
+//     console.log("folder renamed");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   }); // folder renaming
+
+// fs.rename("./demo.js", "./sample.java")
+//   .then(() => {
+//     console.log("file renamed");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   }); // file renaming
+
+//! BlogApp --> backend --> controller --> userController.js (create inside built-in)
+// first using synchronous execution
+// async --> using promises, callbacks (any one way)'
+let fs1 = require("fs").promises;
+// fs1.mkdirSync("./BlogApp");
+// console.log("folder created");
+// fs1.mkdirSync("./BlogApp/backend");
+// fs1.mkdirSync("./BlogApp/backend/controller");
+// fs1.writeFileSync("./BlogApp/backend/controller/userController.js", "hi this is controller");
+
+fs1
+  .mkdir("./BlogApp")
+  .then(() => {
+    fs1
+      .mkdir("./BlogApp/backend")
+      .then(() => {
+        fs1
+          .mkdir("./BlogApp/backend/controller")
+          .then(() => {
+            fs1
+              .writeFile("./BlogApp/backend/controller/userController.js", "let a = 20")
+              .then(() => {})
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
