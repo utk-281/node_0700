@@ -438,13 +438,13 @@ let data = fs2.readFileSync("./fs.js"); // source --> os (the file is present on
 //! Buffer --> array of values which is not in readable format
 //~ we can manipulate the buffer values using it's methods
 
-// let fs3 = require("fs");
+let fs3 = require("fs");
 
-// let value = fs3.createReadStream("./index.html", { highWaterMark: 50 });
+let value2 = fs3.createReadStream("./index.html", { highWaterMark: 50 });
 
-// value.on("data", (chunk) => {
-//   console.log(`this is my chunk --> ${chunk} -->  of size ${chunk.length}\n`);
-// });
+value2.on("data", (chunk) => {
+  console.log(`this is my chunk --> ${chunk} -->  of size ${chunk.length}\n`);
+});
 
 //! streaming ==> copying data from source to destination in continuous manner. In nodeJS we have 4 different types of streams
 
@@ -474,12 +474,12 @@ let value = fs5.createReadStream("./index.html", "utf-8"); // ==> createReadStre
 //! writing the contents in chunks
 // method name ==> createWriteStream("path/ filename")
 
-// let file = fs5.createWriteStream("./demo.java");
-// // console.log(file);
+let file = fs5.createWriteStream("./demo.java"); // this method will be developing a stream
+// console.log(file);
 
-// file.write("let a = 10", () => {
-//   console.log("file created");
-// });
+file.write("let a = 10", () => {
+  console.log("file created");
+});
 
 //! duplex stream ==> both operation at the same time
 // source --> index.html file
