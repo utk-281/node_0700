@@ -13,6 +13,7 @@
 
 //! in nodeJS http is a built in module, which is used to create a server.
 const http = require("http"); // nodeJS uses commonJS format (by default node uses this format)
+const fs = require("fs");
 // import variable from "xyz" // ES6 format
 // console.log(http);
 
@@ -21,27 +22,90 @@ const http = require("http"); // nodeJS uses commonJS format (by default node us
 //! 2) create a server using createServer()
 //! 3) assign a port number to the server using listen()
 
-let server = http.createServer((req, res) => {
-  //! to send a response (this will be displayed on the browser UI)
-  //   res.write("hello from server"); // write() is used to display the data on the browser UI
-  //   res.end(); // this will end/ terminate your current req-res cycle
+// let server = http.createServer((req, res) => {
+//   //! to send a response (this will be displayed on the browser UI)
+//   //   res.write("hello from server"); // write() is used to display the data on the browser UI
+//   //   res.end(); // this will end/ terminate your current req-res cycle
+//   // res.write("hi");
+//   // res.end("this will display the message and will end the current req res cycle");
+//   // console.log(req); // {}
+//   // console.log(res); // {}
+//   // res.end();
+// });
+// // createServer() will be accepting a callback function with two parameters req and res
 
-  res.write("hi");
-  res.end("this will display the message and will end the current req res cycle");
-});
-// createServer() will be accepting a callback function with two parameters req and res
+// // a ==> req
+// // b ==> res
 
-// a ==> req
-// b ==> res
-
-server.listen(9000, (abc) => {
-  // listen() also accepts a callback function along with the port number
-  if (abc) console.log(abc);
-  console.log("server running at port 9000");
-});
+// server.listen(9000, (abc) => {
+//   // listen() also accepts a callback function along with the port number
+//   if (abc) console.log(abc);
+//   console.log("server running at port 9000");
+// });
 //! callback function is not mandatory here
 
 //! to access your server type localhost:portNumber
 // localhost:9000
 
 //! to kill the server press ctrl + c on the terminal
+
+//! Routing ==> handling clients/ users multiple endpoint requests
+
+// https://nodejs.org/en ==> url for home page (base url)
+// https://nodejs.org/en/about ==> url for about page
+// ==> baseURL/about
+// https://nodejs.org/en/blog ==> url for blog page
+// ==> baseURl/blog
+// https://nodejs.org/en/download ==> url for download page
+
+// /about, /blog, /download ==> endpoints
+// baseURL/endpoints
+
+// let server = http.createServer((req, res) => {
+//   console.log(req.url);
+// });
+
+// server.listen(9000, (err) => {
+//   if (err) console.log(err);
+//   console.log("server running....");
+// });
+
+// // localhost:9000 ==> res : "/"
+// // ! by default the endpoint for landing/ home page is "/"
+
+// //! we can extract the endpoint from url property
+// // format ==> let endpoint = req.url
+
+//! display a message on the UI as hello world in h1 tag
+let server = http.createServer((req, res) => {
+  //! displaying html message
+  // res.end("<h1>hello world</h1>");
+  //! ======================= display a html page =======================
+  // let contents = fs.readFileSync("./Pages/index.html", "utf-8");
+  // res.end(contents);
+  // console.log(contents);
+  // console.log(req.url);
+  // res.end(`<h1>this is home page</h1>
+  //   <p>
+  //     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, voluptas ex provident
+  //     pariatur esse ratione aliquid quibusdam dolorum fuga nisi ducimus tenetur aspernatur quod
+  //     dicta architecto recusandae soluta porro voluptate quae culpa reprehenderit velit nulla! Nulla
+  //     ipsam vitae saepe obcaecati nam! Quisquam, accusantium consequuntur? Eligendi nihil labore
+  //     accusamus, nam maxime quas dio aut consectetur reiciendis, fuga veritatis dolorum?
+  //   </p>
+  //   <h2>this is sub heading</h2>
+  //   <h5>this is sub sub heading</h5>`);
+  //! ======================= display a css file =======================
+  fs.readFile("./Pages/styles.css", "utf-8", (err, data) => {
+    if (err) console.log(err);
+    res.end(data);
+  });
+});
+
+server.listen(9000, (err) => {
+  if (err) console.log(err);
+  console.log("server running...");
+});
+
+// ==> /
+// ==> /favicon
