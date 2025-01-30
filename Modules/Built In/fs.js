@@ -482,8 +482,8 @@ file.write("let a = 10", () => {
 });
 
 //! duplex stream ==> both operation at the same time
-// source --> index.html file
-// destination --> demo.java file
+// source --> index.html file / server
+// destination --> demo.java file / we browser or end()
 
 let contents = fs5.createReadStream("./index.html", "utf-8");
 let newFile = fs5.createWriteStream("./demo.java");

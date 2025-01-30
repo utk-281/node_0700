@@ -77,35 +77,86 @@ const fs = require("fs");
 // // format ==> let endpoint = req.url
 
 //! display a message on the UI as hello world in h1 tag
+// let server = http.createServer((req, res) => {
+//   //! displaying html message
+//   // res.writeHead(201, "myCustomMsg", { "Content-Type": "text/html" });
+//   // res.end("<h1>hello world</h1>");
+//   //! ======================= display a html page =======================
+//   // let contents = fs.readFileSync("./Pages/index.html", "utf-8");
+//   // res.end(contents);
+//   // console.log(contents);
+//   // console.log(req.url);
+//   // res.end(`<h1>this is home page</h1>
+//   //   <p>
+//   //     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, voluptas ex provident
+//   //     pariatur esse ratione aliquid quibusdam dolorum fuga nisi ducimus tenetur aspernatur quod
+//   //     dicta architecto recusandae soluta porro voluptate quae culpa reprehenderit velit nulla! Nulla
+//   //     ipsam vitae saepe obcaecati nam! Quisquam, accusantium consequuntur? Eligendi nihil labore
+//   //     accusamus, nam maxime quas dio aut consectetur reiciendis, fuga veritatis dolorum?
+//   //   </p>
+//   //   <h2>this is sub heading</h2>
+//   //   <h5>this is sub sub heading</h5>`);
+//   //! ======================= display a css file =======================
+//   // res.writeHead(200, "OK", { "Content-type": "text/css" });
+//   // fs.readFile("./Pages/styles.css", "utf-8", (err, data) => {
+//   //   if (err) console.log(err);
+//   //   res.end(data);
+//   // });
+//   //! ======================= display a json file =======================
+//   // res.writeHead(200, "ok", { "Content-Type": "application/json" });
+//   // let value = fs.readFileSync("./Pages/data.json", "utf-8");
+//   // res.end(value);
+// });
+
+//! whenever we are sending a response, we also have to set the headers of the response.
+//! to set the headers of the response we use writeHead()
+//! writeHead("statusMessage", statusCode, {"content-type":"value", })
+// statusCode ==> 1XX, 2XX, 3XX, 4XX, 5XX
+// 5XX ==> server error (500 ==> internal server error)
+// 4XX ==> client error, (while submitting any kind of form) (400,401,404,403, etc...)
+// 3XX ==> redirection (redirecting users from one page to another page) (301, 302)
+// 2XX ==> success (200, 201)
+// 1XX ==> information
+
+// content-type ==> specifies which type of file is being send as a response
+//? for html file ==> text/html
+//? for css file ==> text/css
+//? for js file ==> text/javascript
+//? json ==> application/json
+//? string ==> text/plain  "this is my string"
+
+//? code as 200 ==> statusMessage : OK
+
+// server.listen(9000, (err) => {
+//   if (err) console.log(err);
+//   console.log("server running...");
+// });
+
+// ==> /
+// ==> /favicon
+
+//! routing ==>
+
 let server = http.createServer((req, res) => {
-  //! displaying html message
-  // res.end("<h1>hello world</h1>");
-  //! ======================= display a html page =======================
-  // let contents = fs.readFileSync("./Pages/index.html", "utf-8");
-  // res.end(contents);
-  // console.log(contents);
-  // console.log(req.url);
-  // res.end(`<h1>this is home page</h1>
-  //   <p>
-  //     Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, voluptas ex provident
-  //     pariatur esse ratione aliquid quibusdam dolorum fuga nisi ducimus tenetur aspernatur quod
-  //     dicta architecto recusandae soluta porro voluptate quae culpa reprehenderit velit nulla! Nulla
-  //     ipsam vitae saepe obcaecati nam! Quisquam, accusantium consequuntur? Eligendi nihil labore
-  //     accusamus, nam maxime quas dio aut consectetur reiciendis, fuga veritatis dolorum?
-  //   </p>
-  //   <h2>this is sub heading</h2>
-  //   <h5>this is sub sub heading</h5>`);
-  //! ======================= display a css file =======================
-  fs.readFile("./Pages/styles.css", "utf-8", (err, data) => {
-    if (err) console.log(err);
-    res.end(data);
-  });
+  if (req.url === "/") {
+    res.writeHead(200, "OK", { "Content-Type": "text/plain" });
+    res.end("this is my home page");
+  } else if (req.url === "/html") {
+    // /Html
+    res.writeHead(200, "ok", "{Content-Type:text/html}");
+    let value = fs.createReadStream("./Pages/index.html");
+    value.pipe(res);
+  } else if (req.url === "/css") {
+    res.writeHead(200, "ok", "{Content-Type:text/css}");
+    fs.createReadStream("./Pages/styles.css").pipe(res);
+  } else if (req.url === "/json") {
+    // /Json
+    res.writeHead(200, "ok", "{Content-Type:application/json}");
+    fs.createReadStream("./Pages/data.json").pipe(res);
+  }
 });
 
 server.listen(9000, (err) => {
   if (err) console.log(err);
   console.log("server running...");
 });
-
-// ==> /
-// ==> /favicon

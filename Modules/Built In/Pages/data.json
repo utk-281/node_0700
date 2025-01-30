@@ -1,0 +1,8 @@
+{
+  "key1": "value1",
+  "key2": false,
+  "key3": 2345,
+  "key4": [1, 2, 3, 4, 5],
+  "key5": {},
+  "key6": null
+}
