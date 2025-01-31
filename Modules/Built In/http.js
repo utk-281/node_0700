@@ -137,26 +137,76 @@ const fs = require("fs");
 
 //! routing ==>
 
+// let server = http.createServer((req, res) => {
+//   //!home page
+//   if (req.url === "/") {
+//     res.writeHead(200, "OK", { "Content-Type": "text/plain" });
+//     res.end("this is my home page");
+//   }
+//   //! html page
+//   else if (req.url === "/html") {
+//     // /Html
+//     res.writeHead(200, "ok", "{Content-Type:text/html}");
+//     let value = fs.createReadStream("./Pages/index.html");
+//     value.pipe(res);
+//   }
+//   //! css page
+//   else if (req.url === "/css") {
+//     res.writeHead(200, "ok", "{Content-Type:text/css}");
+//     fs.createReadStream("./Pages/styles.css").pipe(res);
+//   }
+//   //! json page
+//   else if (req.url === "/json") {
+//     // /Json
+//     res.writeHead(200, "ok", "{Content-Type:application/json}");
+//     fs.createReadStream("./Pages/data.json").pipe(res);
+//   }
+//   //! about page, download page and contact-us page
+// });
+
+// server.listen(9000, (err) => {
+//   if (err) console.log(err);
+//   console.log("server running...");
+// });
+
+//! we have create a routing which handles 5 endpoints i.e. home page, download page, about us and blogs page and a styles.css file
 let server = http.createServer((req, res) => {
+  //! home page
   if (req.url === "/") {
-    res.writeHead(200, "OK", { "Content-Type": "text/plain" });
-    res.end("this is my home page");
-  } else if (req.url === "/html") {
-    // /Html
-    res.writeHead(200, "ok", "{Content-Type:text/html}");
-    let value = fs.createReadStream("./Pages/index.html");
-    value.pipe(res);
-  } else if (req.url === "/css") {
-    res.writeHead(200, "ok", "{Content-Type:text/css}");
+    res.writeHead(200, "OK", { "Content-Type": "text/html" });
+    fs.createReadStream("./Pages/index.html").pipe(res);
+  }
+  //! download page
+  else if (req.url === "/download") {
+    res.writeHead(200, "OK", { "Content-Type": "text/html" });
+    fs.createReadStream("./Pages/download.html").pipe(res);
+  }
+  //! about us page
+  else if (req.url === "/about-us") {
+    res.writeHead(200, "OK", { "Content-Type": "text/html" });
+    fs.createReadStream("./Pages/about-us.html").pipe(res);
+  }
+  //! blogs page
+  else if (req.url === "/blogs") {
+    res.writeHead(200, "OK", { "Content-Type": "text/html" });
+    fs.createReadStream("./Pages/blogs.html").pipe(res);
+  } // endpoint ==> /blogs and ./blogs
+  //! css
+  else if (req.url === "/styles") {
+    res.writeHead(200, "OK", { "Content-Type": "text/css" });
     fs.createReadStream("./Pages/styles.css").pipe(res);
-  } else if (req.url === "/json") {
-    // /Json
-    res.writeHead(200, "ok", "{Content-Type:application/json}");
-    fs.createReadStream("./Pages/data.json").pipe(res);
+  } //! pass the endpoint as ==> /endpoint-name
+  else {
+    res.end("page not found");
   }
 });
 
+//! user is requesting ==> /contact-me
+
 server.listen(9000, (err) => {
   if (err) console.log(err);
-  console.log("server running...");
+  console.log("server running .......");
 });
+
+//! compass ==> https://www.mongodb.com/try/download/community
+//! shell ==> https://www.mongodb.com/try/download/shell
