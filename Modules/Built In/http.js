@@ -210,3 +210,8 @@ server.listen(9000, (err) => {
 
 //! compass ==> https://www.mongodb.com/try/download/community
 //! shell ==> https://www.mongodb.com/try/download/shell
+
+// C:\Program Files\MongoDB\Server\8.0\data\
+// C:\Program Files\MongoDB\Server\8.0\log\
+
+// shell C:\Users\utkar\AppData\Local\Programs\mongosh\
