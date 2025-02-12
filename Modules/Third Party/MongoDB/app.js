@@ -48,17 +48,44 @@ let connectDB = async () => {
   let collection = await database.createCollection("users");
   console.log("collection created");
 
+  //! insert data into the collection
   //   collection.insertOne({ name: "John", city: "Delhi" });
   //   console.log("data inserted");
 
   //   let result = await collection.insertMany([{ name: "abc" }, { email: "abc@gmail.com" }]);
   //   console.log(result);
 
+  //! find data from the collection
   //   let result = await collection.findOne({ name: "abc" });
   //   console.log(result);
 
   //   let res = await collection.find().toArray();
   //   console.log(res);
+
+  //! update data in the collection
+  // let result = await collection.updateOne(
+  //   { name: "John" },
+  //   { $set: { email: "updatedEmail@gmail.com" } }
+  // );
+
+  // console.log(result);
+  // console.log("doc updated");
+
+  // let result = await collection.updateMany({}, { $set: { address: "Bangalore" } });
+  // console.log(result);
+  // console.log("docs updated");
+
+  //! delete data from the collection
+  //   let result = await collection.deleteOne({});
+  //   console.log(result);
+
+  //   let results = await collection.deleteMany({ name: "abc" });
+  //   console.log(results);
 };
 
 connectDB();
+
+// emp = {
+//   name: "abc",
+//   name: "def",
+// };
