@@ -50,17 +50,49 @@ let path = require("path");
 
 //! 6. join() --> it is used to join the paths
 // console.log(path.join("folder1", "folder2", "data.txt"));
-// folder1\folder2\data.txt
+// folder1\folder2\data.txt --> relative
 
 // console.log(path.join("/folder1", "folder2", "data.txt"));
-// \folder1\folder2\data.txt
+// \folder1\folder2\data.txt --> this path is from root directory (absolute)
 
 // console.log(path.join("/folder1", "/folder2", "/data.txt"));
 // \folder1\folder2\data.txt
 
-// console.log(path.join("folder1", "//folder2", "data.txt"));
-// folder1\folder2\data.txt
+// console.log(path.join("folder1", "/folder2", "data.txt"));
+// folder1\folder2\data.txt --> relative
 
-console.log(path.join("folder1", "//folder2", "../data.txt"));
-// folder1\data.txt
+// console.log(path.join("folder1", "//folder2", "data.txt"));
+// folder1\folder2\data.txt --> relative
+
+// console.log(path.join("//folder1", "folder2", "data.txt"));
+// \\folder1\folder2\data.txt --> absolute (// and / both are same)
+
+// console.log(path.join("folder1", "//folder2", "../data.txt"));
+// folder1\data.txt --> relative
 //? if we are using ../ then it will ignore the previous path
+
+// console.log(path.join("/folder1", "folder2", "../data.txt"));
+// \folder1\data.txt --> absolute
+
+//! 7. resolve() --> it is used to join the path but it returns the absolute path
+// console.log(path.resolve("folder1", "folder2", "data.txt"));
+// C:\Users\utkar\Desktop\Classes\Node 0700\Modules\Built In\folder1\folder2\data.txt --> absolute
+
+// console.log(path.resolve("/folder1", "folder2", "data.txt"));
+// C:\folder1\folder2\data.txt
+
+// console.log(path.resolve("/folder1", "/folder2", "/data.txt"));
+// C:\data.txt
+
+// console.log(path.resolve("folder1", "/folder2", "data.txt"));
+// C:\folder2\data.txt
+
+// console.log(path.resolve("folder1", "//folder2", "data.txt"));
+// C:\folder2\data.txt
+
+// console.log(path.resolve("folder1", "//folder2", "../data.txt"));
+// C:\data.txt
+
+// fs.readFileSync("/Demo/demo.js"); let data = fs.readFileSync("http.js"); --> absolute
+//? C:\Users\utkar\Desktop\Classes\Node 0700\http.js
+// fs.readFileSync("../../Demo/demo.js"); --> relative
