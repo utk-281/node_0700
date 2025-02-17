@@ -1,9 +1,18 @@
 let express = require("express");
-let mongodb = require("mongodb");
+let { MongoClient } = require("mongodb");
 let fs = require("fs");
+
+let connectDB = async () => {
+  let client = await MongoClient.connect("mongodb://localhost:27017");
+  let database = client.db("users");
+  let collection = await database.createCollection("usersInfo");
+
+  return collection;
+};
 
 let app = express();
 
+//! middleware
 app.use(express.urlencoded({ extended: true })); // todo
 
 //! home page
@@ -24,19 +33,25 @@ app.get("/about", (req, res) => {
 });
 
 //! post method ==> form data
-app.post("/abc", (req, res) => {
+app.post("/xyz", async (req, res) => {
   //! whatever endpoint is used in this method, pass the same in form action
   //! set the method to post in the form
   //! provide value to the name attribute
-  //   console.log(req.body); //   { name: 'utkarsh', email: 'utkarsh', password: '1234' }
-  //{ userName: 'qwerty', userEmail: 'qwerty', userPassword: '1234' }
-  //   res.send(req.body);
+  // console.log(req.body);
+  // { userName: 'abc', userEmail: 'abc@gmail.com', userPassword: '123' }
 
+  // let result = req.body;
   let { userName, userEmail, userPassword } = req.body;
-  res.send(`user with email:<h1> ${userEmail}</h1> and password: ${userPassword} is created`);
 
   //! since i have the data ==> i can store this data in some file
+  fs.appendFileSync("./data.txt", `{${userName}, ${userEmail}, ${userPassword}}\\n`);
   //! since i have the data ==> i can store this in the database
+  let myCollection = await connectDB();
+  // console.log(myCollection);
+  let data = await myCollection.insertOne({ userEmail, userName, userPassword });
+  // console.log(data);
+
+  res.send(`name : ${userName} with email : ${userEmail} has registered successfully`);
 });
 
 app.listen(9000, (err) => {
@@ -47,3 +62,5 @@ app.listen(9000, (err) => {
 // node filename
 // nodemon filename
 //! endpoint --> /abc
+// parse
+//! if i was not using the middleware the req.body gave me undefined
