@@ -1,6 +1,7 @@
 let express = require("express");
 let { MongoClient } = require("mongodb");
 let fs = require("fs");
+let myRoutes = require("./routes");
 
 let connectDB = async () => {
   let client = await MongoClient.connect("mongodb://localhost:27017");
@@ -13,6 +14,7 @@ let connectDB = async () => {
 let app = express();
 
 //! middleware
+app.use(myRoutes);
 app.use(express.urlencoded({ extended: true })); // express.urlencoded(), built in middleware, app level middleware
 
 //? {extended : true} ==> it is using a module --> qs (with the help of this module we can parse nested data also, [[], [], {}, {{}, {}}])
@@ -26,18 +28,6 @@ app.use(express.urlencoded({ extended: true })); // express.urlencoded(), built 
   app.use(urlencoded())
 
 */
-
-//! home page
-app.get("/", (req, res) => {
-  //   res.send("this is home page");
-  fs.createReadStream("./pages/home.html").pipe(res);
-});
-
-//! signup page
-app.get("/signup", (req, res) => {
-  //   res.send("this is signup page!!!!"); // name, email, password
-  fs.createReadStream("./pages/signup.html").pipe(res);
-});
 
 //! about page
 app.get("/about", (req, res) => {
