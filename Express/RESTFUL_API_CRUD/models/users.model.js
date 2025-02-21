@@ -9,22 +9,22 @@ let userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      // required: true,
     },
     age: {
       type: Number,
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      // required: true,
+      // unique: true,
     },
     password: {
       type: String,
     },
     phoneNumber: {
       type: Number,
-      required: [true, "phone number is required"],
+      // required: [true, "phone number is required"],
     },
   },
   { timestamps: true } // todo

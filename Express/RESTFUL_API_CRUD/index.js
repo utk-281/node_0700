@@ -2,10 +2,15 @@
 
 let express = require("express");
 const { connectDB } = require("./config/database");
+let userRoutes = require("./routes/users.routes");
 
 connectDB();
 
 let app = express();
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(userRoutes);
 
 app.listen(9000, (err) => {
   if (err) console.log(err);
