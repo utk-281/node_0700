@@ -27,7 +27,7 @@ let userSchema = new mongoose.Schema(
       // required: [true, "phone number is required"],
     },
   },
-  { timestamps: true } // todo
+  { timestamps: true } // it adds two fields, createdAt and updatedAt
 );
 module.exports = mongoose.model("User", userSchema); // collection-name : users
 // collection would be created in database with all lower case and plural of model name
