@@ -4,17 +4,45 @@
 let USER_SCHEMA = require("../models/users.model");
 
 let createUser = async (req, res) => {
-  console.log(req.body);
-  //   let data = req.body;
-  let { name, age, email, password, phoneNumber } = req.body;
-  let newUser = await USER_SCHEMA.create({ name, age, email, password, phoneNumber });
+  try {
+    console.log(req.body);
+    //   let data = req.body;
+    let { name, age, email, password, phoneNumber } = req.body;
 
-  res.json({ success: true, message: "user data saved", newUser });
+    let existingUser = await USER_SCHEMA.findOne({ email });
+    if (existingUser)
+      return res.status(409).json({ success: false, message: "user already exists" });
+
+    let newUser = await USER_SCHEMA.create({ name, age, email, password, phoneNumber });
+
+    res.status(201).json({ success: true, message: "user data saved", newUser });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "error occurred while creating a new user",
+      error: err.message,
+    });
+  }
 };
 
 let fetchAllUsers = async (req, res) => {
-  let payload = await USER_SCHEMA.find();
-  res.json({ success: true, message: "data fetched", count: payload.length, payload });
+  try {
+    let payload = await USER_SCHEMA.find();
+
+    if (payload.length === 0)
+      return res.status(404).json({ success: false, message: "no users found" });
+
+    res
+      .status(200)
+      .json({ success: true, message: "data fetched", count: payload.length, payload });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "error occurred while fetching all users",
+      error: err.message,
+    });
+  }
 };
 
 let singleUser = async (req, res) => {
@@ -47,11 +75,18 @@ let updateUser = async (req, res) => {
   res.json({ success: true, message: "data updated", updatedUser });
 };
 
-let deleteUser = (req, res) => {};
+let deleteUser = async (req, res) => {
+  let { id } = req.params;
+
+  let deleteUser = await USER_SCHEMA.deleteOne({ _id: id });
+
+  res.json({ success: true, message: "data deleted", deleteUser });
+};
 
 module.exports = {
   createUser,
   fetchAllUsers,
   singleUser,
   updateUser,
+  deleteUser,
 };
