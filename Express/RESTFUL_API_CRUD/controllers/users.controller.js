@@ -10,8 +10,8 @@ let createUser = async (req, res) => {
     let { name, age, email, password, phoneNumber } = req.body;
 
     let existingUser = await USER_SCHEMA.findOne({ email });
-    if (existingUser)
-      return res.status(409).json({ success: false, message: "user already exists" });
+    // if (existingUser)
+    //   return res.status(409).json({ success: false, message: "user already exists" });
 
     let newUser = await USER_SCHEMA.create({ name, age, email, password, phoneNumber });
 
@@ -46,41 +46,73 @@ let fetchAllUsers = async (req, res) => {
 };
 
 let singleUser = async (req, res) => {
-  console.log(req.params);
-  // { id: '67bbd48c762b128cc3e2cc3d' }
-  let { id } = req.params;
-  // let user = await USER_SCHEMA.findOne({ _id: id });
+  try {
+    console.log(req.params);
+    // { id: '67bbd48c762b128cc3e2cc3d' }
+    let { id } = req.params;
+    // let user = await USER_SCHEMA.findOne({ _id: id });
 
-  let user = await USER_SCHEMA.findOne({ _id: req.params.id });
+    let user = await USER_SCHEMA.findOne({ _id: req.params.id });
 
-  res.json({ success: true, message: "data fetched", user });
+    if (!user) return res.status(404).json({ success: false, message: "user not found" });
+
+    res.json({ success: true, message: "data fetched", user });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "error occurred while fetching single user",
+      error: error.message,
+    });
+  }
 };
 
 let updateUser = async (req, res) => {
-  let { id } = req.params;
+  try {
+    let { id } = req.params;
 
-  let updatedUser = await USER_SCHEMA.updateOne(
-    { _id: id },
-    {
-      $set: {
-        name: req.body.name,
-        age: req.body.age,
-        email: req.body.email,
-        password: req.body.password,
-        phoneNumber: req.body.phoneNumber,
-      },
-    }
-  );
+    let findUser = await USER_SCHEMA.findOne({ _id: id });
+    if (!findUser) return res.status(404).json({ success: false, message: "user not found" });
 
-  res.json({ success: true, message: "data updated", updatedUser });
+    let updatedUser = await USER_SCHEMA.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: req.body.name,
+          age: req.body.age,
+          email: req.body.email,
+          password: req.body.password,
+          phoneNumber: req.body.phoneNumber,
+        },
+      }
+    );
+
+    res.json({ success: true, message: "data updated", updatedUser });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "error occurred while updating user",
+      error: error.message,
+    });
+  }
 };
 
 let deleteUser = async (req, res) => {
-  let { id } = req.params;
+  try {
+    let { id } = req.params;
 
-  let deleteUser = await USER_SCHEMA.deleteOne({ _id: id });
+    let findUser = await USER_SCHEMA.findOne({ _id: id });
+    if (!findUser) return res.status(404).json({ success: false, message: "user not found" });
 
-  res.json({ success: true, message: "data deleted", deleteUser });
+    let deleteUser = await USER_SCHEMA.deleteOne({ _id: id });
+
+    res.json({ success: true, message: "data deleted", deleteUser });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "error occurred while deleting user",
+      error: error.message,
+    });
+  }
 };
 
 module.exports = {
