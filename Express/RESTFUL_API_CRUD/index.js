@@ -4,6 +4,9 @@ let express = require("express");
 const { connectDB } = require("./config/database");
 let userRoutes = require("./routes/users.routes");
 
+//! dotenv module is used to access the environment variables and config is used to parse(or read) the environment variables
+require("dotenv").config();
+
 connectDB();
 
 let app = express();
@@ -11,11 +14,13 @@ let app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(userRoutes);
+app.use("/v1/users", userRoutes);
 
-app.listen(9000, (err) => {
+// console.log(process.env);
+
+app.listen(process.env.PORT, (err) => {
   if (err) console.log(err);
-  console.log("server running at port 9000");
+  console.log("server running at port: ", process.env.PORT);
 });
 
 //! dependencies

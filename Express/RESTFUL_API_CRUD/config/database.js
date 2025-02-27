@@ -1,7 +1,7 @@
 let mongoose = require("mongoose");
 
 let connectDB = async () => {
-  await mongoose.connect("mongodb://localhost:27017/MVC_DB");
+  await mongoose.connect(process.env.MONGODB_URL);
   console.log("Database connected");
 };
 
