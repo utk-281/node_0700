@@ -7,4 +7,4 @@ class ErrorHandler extends Error {
 
 module.exports = ErrorHandler;
 
-// new ErrorHandler("user already exists", 409)
+// const err = new ErrorHandler("message", 500);

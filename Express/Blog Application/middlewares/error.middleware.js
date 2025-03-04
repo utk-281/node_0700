@@ -1,24 +1,30 @@
-// new ErrorHandler("user already exists", 409)
-// new Error()
-
-const ErrorHandler = require("../utils/errorHandler");
+//err1=  new Error("message", 102) --> msg of err1:message, status code of err1:102
+//err2 =  new Error() --> msg of err2:Internal Server Error, status code of err2:500
+//err2 =  new Error( null , 501) --> msg of err2:Internal Server Error, status code of err2:500
+// new Error("msg", 500)
 
 exports.error = (err, req, res, next) => {
-  //! code --> 11000
+  //! duplicate key error
   if (err.code === 11000) {
-    res.status(409).json({
-      success: false,
-      message: "User with this email already registered",
-      errors: new ErrorHandler("user already exists", 409),
-    });
+    err.message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+    err.statusCode = 400;
   }
 
-  //! handling global error
+  //! ValidationError error
+  if (err.name === "ValidationError") {
+    err.message = Object.values(err.errors).map((abc) => abc.message);
+    err.statusCode = 400;
+  }
+
+  //! cast error
+
+  //! global error handler
+  err.message = err.message || "Internal Server Error!!";
   err.statusCode = err.statusCode || 500;
-  err.message = err.message || "Internal Server Error";
+
   res.status(err.statusCode).json({
     success: false,
     message: err.message,
-    errObject: err,
+    errObj: err,
   });
 };
