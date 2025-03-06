@@ -1,4 +1,5 @@
 let { Schema, model } = require("mongoose");
+let bcrypt = require("bcrypt");
 
 let userSchema = new Schema(
   {
@@ -29,6 +30,12 @@ let userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", async function () {
+  let salt = await bcrypt.genSalt(10); // generating a random string of size 10
+  let hashedPassword = await bcrypt.hash(this.password, salt); // hash the password with the salt
+  this.password = hashedPassword; // store the hashed password in database
+});
 
 module.exports = model("User", userSchema);
 // lowercase + plural ==> users
