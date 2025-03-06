@@ -17,6 +17,10 @@ exports.error = (err, req, res, next) => {
   }
 
   //! cast error
+  if (err.name === "CastError") {
+    err.statusCode = 400;
+    err.message = `Resource not found. Invalid: ${err.path}`;
+  }
 
   //! global error handler
   err.message = err.message || "Internal Server Error!!";
@@ -25,6 +29,6 @@ exports.error = (err, req, res, next) => {
   res.status(err.statusCode).json({
     success: false,
     message: err.message,
-    errObj: err,
+    // errObj: err,
   });
 };

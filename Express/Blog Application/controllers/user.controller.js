@@ -44,6 +44,29 @@ exports.fetchOneUser = asyncHandler(async (req, res) => {
   });
 });
 
+exports.deleteUser = asyncHandler(async (req, res) => {
+  let deletedUser = await USER_SCHEMA.findByIdAndDelete(req.params.id);
+  if (!deletedUser) throw new ErrorHandler("No user found", 404);
+
+  res.status(200).json({
+    success: true,
+    message: "user deleted successfully",
+    deletedUser,
+  });
+});
+
+exports.updateUser = asyncHandler(async (req, res) => {
+  console.log(req.body.password);
+  let updatedUser = await USER_SCHEMA.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  if (!updatedUser) throw new ErrorHandler("No user found", 404);
+
+  res.status(200).json({
+    success: true,
+    message: "User updated successfully",
+    updatedUser,
+  });
+});
+
 // using asyncHandler ==> if error occurs it just displays it
 
 //! we need to handle the error --> if any error occurs the flow will go to error middleware
