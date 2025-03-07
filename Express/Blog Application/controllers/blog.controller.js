@@ -3,9 +3,9 @@ const asyncHandler = require("express-async-handler");
 const ErrorHandler = require("../utils/errorHandler");
 
 exports.createBlog = asyncHandler(async (req, res) => {
-  let { title, description } = req.body;
+  let { title, description, createdBy } = req.body;
 
-  let newBlog = await BLOG_SCHEMA.create({ title, description });
+  let newBlog = await BLOG_SCHEMA.create({ title, description, createdBy });
 
   res.status(201).json({ success: true, message: "blog created successfully", newBlog });
 });
@@ -24,7 +24,7 @@ exports.fetchAllBlogs = asyncHandler(async (req, res) => {
 });
 
 exports.fetchOneBlog = asyncHandler(async (req, res) => {
-  let blog = await BLOG_SCHEMA.findById(req.params.id);
+  let blog = await BLOG_SCHEMA.findById(req.params.id).populate("createdBy");
 
   if (!blog) throw new ErrorHandler("No blog found", 404);
 

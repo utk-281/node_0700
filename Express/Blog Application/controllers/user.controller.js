@@ -18,6 +18,12 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, message: "User registered successfully", data: newUser });
 });
 
+exports.loginUser = asyncHandler(async (req, res) => {
+  let { email, password } = req.body;
+  let user = await USER_SCHEMA.findOne({ email });
+  if (!user) throw new ErrorHandler("Invalid credentials", 401);
+});
+
 exports.getAllUsers = asyncHandler(async (req, res) => {
   let users = await USER_SCHEMA.find();
 
