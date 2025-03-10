@@ -38,9 +38,9 @@ userSchema.pre("save", async function () {
   this.password = hashedPassword; // store the hashed password in database
 }); // hashing is a one way process
 
-userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
+// userSchema.methods.comparePassword = async function (enteredPassword) {
+//   return await bcrypt.compare(enteredPassword, this.password);
+// };
 
 module.exports = model("User", userSchema);
 // lowercase + plural ==> users
