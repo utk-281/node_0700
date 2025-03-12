@@ -9,3 +9,5 @@ class ErrorHandler extends Error {
 }
 
 module.exports = ErrorHandler;
+
+//! here we are creating an error, we are not handling it

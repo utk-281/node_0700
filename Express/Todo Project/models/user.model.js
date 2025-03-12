@@ -44,4 +44,10 @@ userSchema.pre("save", async function (next) {
   this.password = hashedPassword;
 });
 
+//! userSchema.methods.methodName
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  // enteredPassword = 123456
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 module.exports = model("User", userSchema);
