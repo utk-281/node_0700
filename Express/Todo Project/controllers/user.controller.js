@@ -6,6 +6,7 @@ const { generateToken } = require("../utils/jwt.utils");
 exports.registerUser = asyncHandler(async (req, res) => {
   //! totalNumberOfTasks ==> this should be automatically updated whenever a user creates/deletes a todo
   //? profilePicture ==> this field is not a part of req.body
+  console.log(req.file);
 
   let { name, email, password, role } = req.body;
 
@@ -45,5 +46,18 @@ exports.loginUser = asyncHandler(async (req, res) => {
   // let token = existingUser.generateToken(this._id); //! ==> this will not work
   // console.log(token);
 
+  /*
+    res.cookie("cookieName", cookieValue, {maxAge: in MS, httpOnly: true})
+   */
+  res.cookie("myCookie", token, {
+    maxAge: 1 * 60 * 60 * 1000, // expiry in ms
+    httpOnly: true, // cookie cannot be accessed by browser,
+  });
   res.status(200).json({ success: true, message: "User logged in", token });
+});
+
+exports.logoutUser = asyncHandler(async (req, res) => {
+  res.clearCookie("myCookie", "", { maxAge: 0 }); // cookie will be deleted and key will be deleted
+  // res.clearCookie("myCookie"); ==> only the value will get deleted but the key will still be there
+  res.status(200).json({ success: true, message: "User logged out" });
 });

@@ -1,4 +1,7 @@
 const express = require("express");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+
 const { PORT } = require("./config/index");
 const { connectDB } = require("./config/db");
 
@@ -9,6 +12,10 @@ connectDB();
 
 const app = express();
 
+app.use(morgan("dev"));
+app.use(cookieParser());
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/v1/users", userRoutes);
 
