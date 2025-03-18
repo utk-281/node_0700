@@ -2,11 +2,17 @@ const userModel = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const ErrorHandler = require("../utils/errorHandler.utils");
 const { generateToken } = require("../utils/jwt.utils");
+const { uploadFileOnCloudinary } = require("../utils/cloudinary.utils");
 
 exports.registerUser = asyncHandler(async (req, res) => {
   //! totalNumberOfTasks ==> this should be automatically updated whenever a user creates/deletes a todo
-  //? profilePicture ==> this field is not a part of req.body
-  console.log(req.file);
+  // console.log(req.file);
+
+  let localFilePath = req?.file?.path;
+  // console.log(localFilePath);
+
+  let uploadedResponse = await uploadFileOnCloudinary(localFilePath);
+  // console.log(uploadedResponse);
 
   let { name, email, password, role } = req.body;
 
@@ -22,6 +28,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     role,
+    profilePicture: uploadedResponse?.url,
   });
   res.status(201).json({
     success: true,
@@ -57,7 +64,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
 });
 
 exports.logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("myCookie", "", { maxAge: 0 }); // cookie will be deleted and key will be deleted
-  // res.clearCookie("myCookie"); ==> only the value will get deleted but the key will still be there
+  res.clearCookie("myCookie", "", { maxAge: 0 }); //both key and value will get deleted
+  // res.clearCookie("myCookie"); // ==> only the value will get deleted but the key will still be there
   res.status(200).json({ success: true, message: "User logged out" });
 });
