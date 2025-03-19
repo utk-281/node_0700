@@ -68,3 +68,11 @@ exports.logoutUser = asyncHandler(async (req, res) => {
   // res.clearCookie("myCookie"); // ==> only the value will get deleted but the key will still be there
   res.status(200).json({ success: true, message: "User logged out" });
 });
+
+exports.updateProfilePicture = asyncHandler(async (req, res) => {});
+
+exports.deleteProfilePicture = asyncHandler(async (req, res) => {});
+
+exports.updateUserProfile = asyncHandler(async (req, res) => {});
+
+exports.getCurrentUser = asyncHandler(async (req, res) => {});
