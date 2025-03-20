@@ -7,6 +7,12 @@ exports.error = (err, req, res, next) => {
     err = new ErrorHandler(400, message);
   }
 
+  //! JsonWebTokenError
+  if (err.name === "JsonWebTokenError") {
+    let message = "Invalid Token, Please login again";
+    err = new ErrorHandler(400, message);
+  }
+
   //! global error Handler
   err.message = err.message || "Internal Server Error";
   err.statusCode = err.statusCode || 500;

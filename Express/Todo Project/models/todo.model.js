@@ -1,8 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-console.log(Schema);
-console.log(Schema.Types);
-
 const todoSchema = new Schema(
   {
     title: {
