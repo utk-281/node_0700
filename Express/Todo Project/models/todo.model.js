@@ -12,7 +12,8 @@ const todoSchema = new Schema(
     },
     dueDate: {
       type: Date,
-      default: Date.now,
+      // default: Date.now,
+      required: true,
     },
     priority: {
       type: String,

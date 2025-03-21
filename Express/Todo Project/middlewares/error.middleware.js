@@ -13,6 +13,12 @@ exports.error = (err, req, res, next) => {
     err = new ErrorHandler(400, message);
   }
 
+  //! CastError
+  if (err.name === "CastError") {
+    let message = `Expected datatype is: ${err.kind} for field: ${err.path}`;
+    err = new ErrorHandler(400, message);
+  }
+
   //! global error Handler
   err.message = err.message || "Internal Server Error";
   err.statusCode = err.statusCode || 500;
