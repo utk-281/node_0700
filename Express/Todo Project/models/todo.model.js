@@ -12,7 +12,7 @@ const todoSchema = new Schema(
     },
     dueDate: {
       type: Date,
-      // default: Date.now,
+      default: Date.now,
       required: true,
     },
     priority: {
@@ -27,7 +27,7 @@ const todoSchema = new Schema(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      //   required:true
+      required: true,
     },
   },
   { timestamps: true }

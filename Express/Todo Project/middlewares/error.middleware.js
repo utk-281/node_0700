@@ -3,7 +3,7 @@ const ErrorHandler = require("../utils/errorHandler.utils");
 exports.error = (err, req, res, next) => {
   //! validation error
   if (err.name === "ValidationError") {
-    let message = Object.values(err.errors).map((obj) => obj.message);
+    let message = Object.keys(err.errors).map((key) => err.errors[key].message);
     err = new ErrorHandler(400, message);
   }
 
@@ -16,7 +16,7 @@ exports.error = (err, req, res, next) => {
   //! CastError
   if (err.name === "CastError") {
     let message = `Expected datatype is: ${err.kind} for field: ${err.path}`;
-    err = new ErrorHandler(400, message);
+    // err = new ErrorHandler(400, message);
   }
 
   //! global error Handler
@@ -28,3 +28,15 @@ exports.error = (err, req, res, next) => {
     errObj: err,
   });
 };
+
+// Object.keys ==> this will convert all the keys present in the object into and array
+
+// emp = {
+//   name:"abc"
+//   age:32,
+//   id:12,
+// };
+// Object.keys(emp); = ["name", "age", "id"];
+// Object.values(emp); = ["abc", 32, 12];
+
+// dd/mm/yyyy

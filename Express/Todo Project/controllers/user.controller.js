@@ -76,3 +76,12 @@ exports.deleteProfilePicture = asyncHandler(async (req, res) => {});
 exports.updateUserProfile = asyncHandler(async (req, res) => {});
 
 exports.getCurrentUser = asyncHandler(async (req, res) => {});
+
+exports.deleteUserProfile = asyncHandler(async (req, res) => {
+  //! delete the profile picture from cloudinary if it is there
+  //! then delete the user
+  let deletedUser = await userModel.findByIdAndDelete(req.user._id);
+  if (!deletedUser) throw new ErrorHandler(404, "User not found");
+
+  res.status(200).json({ success: true, message: "User deleted", deletedUser });
+});
