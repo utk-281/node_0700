@@ -2,7 +2,8 @@ const userModel = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const ErrorHandler = require("../utils/errorHandler.utils");
 const { generateToken } = require("../utils/jwt.utils");
-const { uploadFileOnCloudinary } = require("../utils/cloudinary.utils");
+const { uploadFileOnCloudinary, deleteFileFromCloudinary } = require("../utils/cloudinary.utils");
+const { extractPublicId } = require("../utils/extractPublicId.utils");
 
 exports.registerUser = asyncHandler(async (req, res) => {
   //! totalNumberOfTasks ==> this should be automatically updated whenever a user creates/deletes a todo
@@ -69,7 +70,34 @@ exports.logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, message: "User logged out" });
 });
 
-exports.updateProfilePicture = asyncHandler(async (req, res) => {});
+exports.updateProfilePicture = asyncHandler(async (req, res) => {
+  //! find the user
+  //! see if the user has uploaded any profile picture previously
+  //! if uploaded, delete the picture
+  //! upload the new profile pic to the cloudinary
+  //! store the url in database
+
+  let user = await userModel.findById(req.user._id);
+
+  let defaultProfilePic =
+    "https://cdn4.vectorstock.com/i/1000x1000/96/43/avatar-photo-default-user-icon-picture-face-vector-48139643.jpg";
+
+  // user.profilePic = https://cdn4.vectorstock.com/i/1000x1000/96/43/avatar-photo-default-user-icon-picture-face-vector-48139643.jpg
+  if (user.profilePicture !== defaultProfilePic) {
+    let public_id = extractPublicId(user.profilePicture);
+    await deleteFileFromCloudinary(public_id);
+  }
+
+  let localFilePath = req?.file?.path;
+  let uploadedResponse = await uploadFileOnCloudinary(localFilePath);
+
+  user.profilePicture = uploadedResponse.secure_url; // assigning a value
+  // user.profilePic = http://res.cloudinary.com/dmqwvd39n/image/upload/v1742781114/todoProject/wuudfff6o06zzzule96d.jpg
+  // new value
+  await user.save();
+
+  res.status(200).json({ success: true, message: "Profile picture updated", user });
+});
 
 exports.deleteProfilePicture = asyncHandler(async (req, res) => {});
 
@@ -80,8 +108,22 @@ exports.getCurrentUser = asyncHandler(async (req, res) => {});
 exports.deleteUserProfile = asyncHandler(async (req, res) => {
   //! delete the profile picture from cloudinary if it is there
   //! then delete the user
-  let deletedUser = await userModel.findByIdAndDelete(req.user._id);
-  if (!deletedUser) throw new ErrorHandler(404, "User not found");
+  let user = await userModel.findById(req.user._id);
 
-  res.status(200).json({ success: true, message: "User deleted", deletedUser });
+  let defaultProfilePic =
+    "https://cdn4.vectorstock.com/i/1000x1000/96/43/avatar-photo-default-user-icon-picture-face-vector-48139643.jpg";
+
+  if (user.profilePicture !== defaultProfilePic) {
+    //delete the profile picture from cloudinary
+    let public_id = extractPublicId(user?.profilePicture);
+    await deleteFileFromCloudinary(public_id);
+  }
+
+  await userModel.findByIdAndDelete(req.user._id);
+
+  res.status(200).json({ success: true, message: "User deleted" });
 });
+
+// todoProject/wuudfff6o06zzzule96d
+
+// https://res.cloudinary.com/dmqwvd39n/image/upload/v1742265707/todoProject/hvnwcervps8imtfvzy2j.jpg

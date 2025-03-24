@@ -16,4 +16,13 @@ router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 
 router.delete("/delete", authenticate, deleteUserProfile);
+
+router.patch(
+  "/update-picture",
+  authenticate,
+  upload.single("profilePicture"),
+  updateProfilePicture
+);
+
 module.exports = router;
+darkm;

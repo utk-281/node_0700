@@ -23,3 +23,8 @@ exports.uploadFileOnCloudinary = asyncHandler(async (localFilePath) => {
   unlinkSync(localFilePath);
   return uploadedResponse;
 });
+
+exports.deleteFileFromCloudinary = (public_id) => {
+  let response = v2.uploader.destroy(public_id);
+  return response;
+};
