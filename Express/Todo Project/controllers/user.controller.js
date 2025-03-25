@@ -82,7 +82,6 @@ exports.updateProfilePicture = asyncHandler(async (req, res) => {
   let defaultProfilePic =
     "https://cdn4.vectorstock.com/i/1000x1000/96/43/avatar-photo-default-user-icon-picture-face-vector-48139643.jpg";
 
-  // user.profilePic = https://cdn4.vectorstock.com/i/1000x1000/96/43/avatar-photo-default-user-icon-picture-face-vector-48139643.jpg
   if (user.profilePicture !== defaultProfilePic) {
     let public_id = extractPublicId(user.profilePicture);
     await deleteFileFromCloudinary(public_id);
@@ -92,18 +91,48 @@ exports.updateProfilePicture = asyncHandler(async (req, res) => {
   let uploadedResponse = await uploadFileOnCloudinary(localFilePath);
 
   user.profilePicture = uploadedResponse.secure_url; // assigning a value
-  // user.profilePic = http://res.cloudinary.com/dmqwvd39n/image/upload/v1742781114/todoProject/wuudfff6o06zzzule96d.jpg
-  // new value
   await user.save();
 
   res.status(200).json({ success: true, message: "Profile picture updated", user });
 });
 
-exports.deleteProfilePicture = asyncHandler(async (req, res) => {});
+exports.deleteProfilePicture = asyncHandler(async (req, res) => {
+  let user = await userModel.findById(req.user._id);
+  let defaultProfilePic =
+    "https://cdn4.vectorstock.com/i/1000x1000/96/43/avatar-photo-default-user-icon-picture-face-vector-48139643.jpg";
 
-exports.updateUserProfile = asyncHandler(async (req, res) => {});
+  if (user.profilePicture !== defaultProfilePic) {
+    let public_id = extractPublicId(user.profilePicture);
+    await deleteFileFromCloudinary(public_id);
+  }
+  user.profilePicture = defaultProfilePic; // assigning a value
+  await user.save(); // this will update the user in db
 
-exports.getCurrentUser = asyncHandler(async (req, res) => {});
+  res.status(200).json({ success: true, message: "Profile picture deleted", user });
+});
+
+exports.updateUserProfile = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  // name, email, password
+  let user = await userModel.findById(req.user._id);
+
+  // console.log(user);
+
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+  user.password = req.body.password || user.password;
+
+  await user.save();
+
+  // console.log(user);
+
+  res.status(200).json({ success: true, message: "User updated", user });
+});
+
+exports.getCurrentUser = asyncHandler(async (req, res) => {
+  let user = await userModel.findById(req.user._id);
+  res.status(200).json({ success: true, message: "User found", user });
+});
 
 exports.deleteUserProfile = asyncHandler(async (req, res) => {
   //! delete the profile picture from cloudinary if it is there
@@ -123,7 +152,3 @@ exports.deleteUserProfile = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, message: "User deleted" });
 });
-
-// todoProject/wuudfff6o06zzzule96d
-
-// https://res.cloudinary.com/dmqwvd39n/image/upload/v1742265707/todoProject/hvnwcervps8imtfvzy2j.jpg

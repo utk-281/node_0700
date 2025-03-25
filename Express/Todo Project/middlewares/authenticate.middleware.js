@@ -21,3 +21,5 @@ exports.authenticate = asyncHandler(async (req, res, next) => {
 
   next();
 });
+
+// protected routes

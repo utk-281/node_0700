@@ -38,10 +38,11 @@ const userSchema = new Schema(
 
 //! pre hook for saving hashed password
 userSchema.pre("save", async function (next) {
-  // if() todo section
+  if (!this.isModified("password")) return next();
   let salt = await bcrypt.genSalt(10);
   let hashedPassword = await bcrypt.hash(this.password, salt);
   this.password = hashedPassword;
+  next();
 });
 
 //! userSchema.methods.methodName

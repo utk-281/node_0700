@@ -4,6 +4,10 @@ const {
   loginUser,
   logoutUser,
   deleteUserProfile,
+  updateProfilePicture,
+  deleteProfilePicture,
+  updateUserProfile,
+  getCurrentUser,
 } = require("../controllers/user.controller");
 const upload = require("../middlewares/multer.middleware");
 const { authenticate } = require("../middlewares/authenticate.middleware");
@@ -24,5 +28,10 @@ router.patch(
   updateProfilePicture
 );
 
+router.patch("/delete-picture", authenticate, deleteProfilePicture);
+
+router.patch("/update-profile", authenticate, updateUserProfile);
+
+router.get("/current-user", authenticate, getCurrentUser);
+
 module.exports = router;
-darkm;
