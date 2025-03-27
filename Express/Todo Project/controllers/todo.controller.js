@@ -27,7 +27,48 @@ exports.addTodo = asyncHandler(async (req, res) => {
 });
 
 exports.fetchAllTodos = asyncHandler(async (req, res) => {
-  let allTodos = await todoModel.find({ createdBy: req?.user?._id });
+  console.log(req.query); // { status: 'false', priority: 'high' }
+
+  let filter = { createdBy: req.user._id };
+
+  // console.log(filter); { createdBy: new ObjectId('67e4b13dc949525d8240ef20',), status:"value" }
+
+  //! based on status
+  if (req.query.status) {
+    //  ?status=true/false
+    filter.status = req.query.status;
+  }
+
+  if (req.query.priority) {
+    // ?priority=low/medium/high
+    filter.priority = req.query.priority;
+  }
+
+  console.log(filter);
+  /* {
+  createdBy: new ObjectId('67e4b13dc949525d8240ef20'),
+  status: 'false',
+  priority: 'high'
+} */
+
+  let sortOptions = {};
+  if (req.query.sort) {
+    // ? sort=dueDate_asc/ dueDate_desc
+    console.log(req.query.sort);
+    console.log(req.query.sort.split("_")); // [ 'dueDate', 'asc' ]
+    const [field, order] = req.query.sort.split("_");
+
+    let value = order === "asc" ? 1 : -1;
+    sortOptions[field] = value;
+  }
+
+  console.log(sortOptions); // { dueDate: 1 }
+
+  let allTodos = await todoModel.find(filter).sort(sortOptions);
+
+  //! filter features ==> based on priority(low, medium, high), status(true, false) and dueDate --> ascending/descending order
+
+  //! filtering todos based on keywords -->
 
   let mappedTodos = allTodos.map((todo) => ({
     ...todo._doc,
@@ -38,7 +79,9 @@ exports.fetchAllTodos = asyncHandler(async (req, res) => {
 
   if (allTodos.length === 0) throw new ErrorHandler(404, "No todos found");
 
-  res.status(200).json({ success: true, message: "All todos", mappedTodos });
+  res
+    .status(200)
+    .json({ success: true, message: "All todos", count: allTodos.length, mappedTodos });
 });
 
 exports.fetchOneTodo = asyncHandler(async (req, res) => {
@@ -81,3 +124,7 @@ exports.deleteTodo = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, message: "Todo deleted", deletedTodo });
 });
+
+// https://www.amazon.in/PRIMESKY%C2%AE-Bathroom-Absorbing-Mat-Anti-Slip/dp/B0BNJ8F3PL/ref=sr_1_2_sspa?dib=eyJ2IjoiMSJ9.rMPekARUdSrvJnaLH5TFd2lH8d1Wu83r1F9ooMHZafmN7Sqz68DwZE45wycl6B5pdUiaxJxAMQjsF-lKxO9xMaV5PCvs0us_MgymXhayWje-WzkKn4xqDH5xdZzmtBIe2tpjIHGL2zHMD3gi3Y8WJmF0KZBAK1hm80ww0S9b3aYUAaiYshtEhNENDuL1de8dLN91Yk9LSnps5AfTmMJX3sMC4ZMT7HUemMcmzXi7Ap6ozgQOUhQiJyYw7_eaBCqyH_KL0j3bGVsS5cnVSsGwt5fMzGayVZZv5LlP2UCYJg4.XHow3sKe3UE0x9pVv-4y1cVd7HFze_nMGiMHpDYOV9Y&dib_tag=se&keywords=Indian+print+home+furnishings&pf_rd_i=1380442031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_s=merchandised-search-7&qid=1743041582&s=kitchen&sr=1-2-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1
+
+//! "?" --> query filtering the data

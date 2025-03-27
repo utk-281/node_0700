@@ -16,7 +16,7 @@ exports.error = (err, req, res, next) => {
   //! CastError
   if (err.name === "CastError") {
     let message = `Expected datatype is: ${err.kind} for field: ${err.path}`;
-    // err = new ErrorHandler(400, message);
+    err = new ErrorHandler(400, message);
   }
 
   //! global error Handler
@@ -26,6 +26,7 @@ exports.error = (err, req, res, next) => {
     success: false,
     message: err.message,
     errObj: err,
+    errLine: err.stack,
   });
 };
 

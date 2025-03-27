@@ -52,3 +52,7 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 };
 
 module.exports = model("User", userSchema);
+
+// super admin 1
+// admin ==> 3 admin (a1, a2, a3)
+// normal users ==> 1000 users (u1, u2, u3,.......)
