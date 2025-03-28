@@ -8,10 +8,33 @@ exports.getAllUsers = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, message: "All users", count: users.length, users });
 });
 
-exports.fetchOneUser = asyncHandler(async (req, res) => {}); // req.params.id
+exports.fetchOneUser = asyncHandler(async (req, res) => {
+  let user = await userModel.findById(req.params.id);
+  if (!user) throw new ErrorHandler(404, "User not found");
 
-exports.updateUserRole = asyncHandler(async (req, res) => {}); // req.params.id
+  res.status(200).json({ success: true, message: "User found", user });
+}); // req.params.id
 
-exports.fetchAllTodos = asyncHandler(async (req, res) => {});
+exports.updateUserRole = asyncHandler(async (req, res) => {
+  let user = await userModel.findById(req.params.id);
+  if (!user) throw new ErrorHandler(404, "User not found");
 
-exports.fetchOneTodo = asyncHandler(async (req, res) => {}); // req.params.id
+  user.role = req.body.role || user.role;
+  await user.save();
+
+  res.status(200).json({ success: true, message: "User role updated", user });
+}); // req.params.id
+
+exports.fetchAllTodos = asyncHandler(async (req, res) => {
+  let todos = await todoModel.find();
+  if (todos.length === 0) throw new ErrorHandler(404, "No todos found");
+
+  res.status(200).json({ success: true, message: "All todos", count: todos.length, todos });
+});
+
+exports.fetchOneTodo = asyncHandler(async (req, res) => {
+  let todo = await todoModel.findById(req.params.id);
+  if (!todo) throw new ErrorHandler(404, "Todo not found");
+
+  res.status(200).json({ success: true, message: "Todo found", todo });
+}); // req.params.id
