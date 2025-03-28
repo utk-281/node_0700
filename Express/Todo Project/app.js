@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const { PORT } = require("./config/index");
 const { connectDB } = require("./config/db");
@@ -19,6 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(morgan("dev"));
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
+
 app.use(cookieParser());
 
 app.use("/v1/users", userRoutes);
@@ -32,3 +42,5 @@ app.listen(PORT, (err) => {
   if (err) throw err;
   console.log("Express server listening on port 9000");
 });
+
+//! cors ==? cross origin resource sharing (if your port is dirent from 9000, if your domain name is different)
