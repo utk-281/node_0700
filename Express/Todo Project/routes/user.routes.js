@@ -30,7 +30,7 @@ router.patch(
 
 router.patch("/delete-picture", authenticate, deleteProfilePicture);
 
-router.patch("/update-profile", authenticate, updateUserProfile);
+router.patch("/update-profile", authenticate, upload.none(), updateUserProfile);
 
 router.get("/current-user", authenticate, getCurrentUser);
 

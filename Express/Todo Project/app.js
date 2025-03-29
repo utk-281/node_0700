@@ -16,6 +16,8 @@ connectDB();
 
 const app = express();
 
+//! multipart/form-data ==> this is not handled by express by default
+// ==> this upload.none() this will parse the form data and populate the req.body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.urlencoded());
 app.use(express.json());

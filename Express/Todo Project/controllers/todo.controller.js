@@ -64,6 +64,7 @@ exports.fetchAllTodos = asyncHandler(async (req, res) => {
 
   console.log(sortOptions); // { dueDate: 1 }
 
+  //! finONe/find ({ filter object}) ==> { name:"", age:32 }
   let allTodos = await todoModel.find(filter).sort(sortOptions);
 
   //! filter features ==> based on priority(low, medium, high), status(true, false) and dueDate --> ascending/descending order
